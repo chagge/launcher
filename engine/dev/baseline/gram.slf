@@ -1,18 +1,15 @@
-N=7 L=10
+N=6 L=8
 I=0 W=s001
 I=1 W=s002
 I=2 W=s003
 I=3 W=s004
-I=4 W=s005
+I=4 W=!NULL
 I=5 W=!NULL
-I=6 W=!NULL
-J=0 S=5 E=0
-J=1 S=5 E=1
-J=2 S=5 E=2
-J=3 S=5 E=3
-J=4 S=5 E=4
-J=5 S=0 E=6
-J=6 S=1 E=6
-J=7 S=2 E=6
-J=8 S=3 E=6
-J=9 S=4 E=6
+J=0 S=4 E=0
+J=1 S=4 E=1
+J=2 S=4 E=2
+J=3 S=4 E=3
+J=4 S=0 E=5
+J=5 S=1 E=5
+J=6 S=2 E=5
+J=7 S=3 E=5
