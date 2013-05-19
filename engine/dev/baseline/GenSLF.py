@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import sys, os
+import sys
 
 wlist = []
 for l in sys.stdin.readlines():

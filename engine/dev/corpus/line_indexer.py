@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
-import os
-from sys import stdin, stdout, exit
+import sys
 
 def idx2str(i):
 	prefix = ''
@@ -17,6 +16,6 @@ def idx2str(i):
 	return prefix + str(i)
 
 i = 0
-for l in stdin.readlines():
+for l in sys.stdin.readlines():
 	i = i + 1
-	stdout.write(idx2str(i) + '\t' + l.strip() + '\n')
+	sys.stdout.write(idx2str(i) + '\t' + l.strip() + '\n')
