@@ -24,10 +24,8 @@ sys.stdout.write('I={} W=!NULL\n'.format(str(E)))
 a = 0
 for n in range(0, nWord):
 	sys.stdout.write('J={} S={} E={}\n'.format(str(a), str(S), str(n)))
-	n+=1
 	a+=1
 
 for n in range(0, nWord):
 	sys.stdout.write('J={} S={} E={}\n'.format(str(a), str(n), str(E)))
-	n+=1
 	a+=1
