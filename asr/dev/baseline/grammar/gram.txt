@@ -1,2 +1,0 @@
-$command = s001 | s002 | s003 | s004 | s005;
-($command)
