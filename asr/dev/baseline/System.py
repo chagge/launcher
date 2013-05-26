@@ -13,7 +13,7 @@ SLF = 'grammar/gram.slf'
 # dictionary
 DICT = 'dict/dict.txt'
 # master label file (MLF)
-MLF = 'mlf/all.mlf'
+MLF = 'mlf/mlf.txt'
 #-----------------------------------------------#
 #          </parameter setting> 
 #-----------------------------------------------#
