@@ -34,13 +34,6 @@ def CreateDict(cmds, Dict):
 		fd.write(buf)
 	fd.close()
 
-def CreateMLF(cmds, MLF):
-	fd = open(MLF, 'w+')
-	fd.write('#!MLF!#\n')
-	for cmd in cmds:
-		buf = '"*/{0}.lab"\n{1}\n.\n'.format(cmd, cmd)
-		fd.write(buf)
-	fd.close()
 
 # CreateProto create a hmm proto file with following specifications:
 # ns - number of states
