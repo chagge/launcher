@@ -4,7 +4,7 @@ from util import *
 #-----------------------------------------------#
 #          parameter setting 
 DB = '../corpus'				# database
-N = 20							# first N utterence in DB
+N = 100 						# first N utterence in DB
 BNF = 'grammar/gram.bnf'		# BNF defined grammar
 SLF = 'grammar/gram.slf'		# standard lattice file (SLF)
 Dict = 'dict/dict.txt'			# dictionary
@@ -61,6 +61,8 @@ for hmm in hmmlist:
 	CreateProto(hmm, 10, NDim)
 
 # flat start
+os.system('rm -rf model/hmm0')
+os.system('mkdir model/hmm0')
 for hmm in hmmlist:
 	os.system(' '.join([
 		'HCompV',
@@ -96,7 +98,7 @@ for i in range(0, EMIter):
 
 # test.scp
 fd = open(TestScp, 'w+')
-for hmm in hmmlist:
+for hmm in hmmlist[:20]:
 	fd.write(os.path.join(DB, 'test', 'mfc', hmm+'.mfc') + '\n')
 fd.close()
 
@@ -119,7 +121,7 @@ os.system(' '.join([
 os.system(' '.join([
 	'HResults',
 	'-I', MLF,
-	//'-p',
+	#'-p',
 	HMMList,
 	RecResult
 	]))
