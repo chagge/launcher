@@ -1,8 +1,8 @@
 ====================== HTK Results Analysis =======================
-  Date: Tue May 28 20:38:45 2013
+  Date: Tue Jun  4 11:19:05 2013
   Ref : mlf/train.mlf
   Rec : test/test.rec
 ------------------------ Overall Results --------------------------
-SENT: %Correct=76.19 [H=48, S=15, N=63]
-WORD: %Corr=76.19, Acc=76.19 [H=48, D=0, S=15, I=0, N=63]
+SENT: %Correct=82.54 [H=52, S=11, N=63]
+WORD: %Corr=82.54, Acc=82.54 [H=52, D=0, S=11, I=0, N=63]
 ===================================================================
