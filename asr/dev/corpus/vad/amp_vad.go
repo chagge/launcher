@@ -8,7 +8,7 @@ import (
 var BYTE_ORDER = binary.BigEndian
 
 const RespondLimit int = 800
-const Alpha int16 = 2
+const Alpha int16 = 3
 
 type HTKWav struct {
 	NumSamp    uint32

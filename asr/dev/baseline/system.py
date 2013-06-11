@@ -4,7 +4,7 @@ from util import *
 #-----------------------------------------------#
 #          parameter setting 
 DB = '../corpus'				# database
-N = 100 						# first N utterence in DB
+MAXN = 100                       # first N utterence in DB
 BNF = 'grammar/gram.bnf'		# BNF defined grammar
 SLF = 'grammar/gram.slf'		# standard lattice file (SLF)
 Dict = 'dict/dict.txt'			# dictionary
@@ -18,9 +18,7 @@ EMIter = 1
 TraceLevel = '1'
 NSTATE = 10
 
-for N in range(1, 101):
-    #-----------------------------------------------#
-
+for N in range(1, MAXN+1):
     #-----------------------------------------------#
     #          data preparation
     hmmlist = BuildCommandList(N)
