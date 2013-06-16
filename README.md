@@ -17,7 +17,7 @@ How is it different?
 ---
 1. Local, it doesn't require internet connection.  
     Almost __all__ products on the market rely on internet connection, because speech recognition is a computation-intensive task, which has to be done in back-end servers.  
-    However, DVT is designed to be a light-weight speech interface.  A voice tagging-retrieve mechanism makes it possible to do the recognition locally on the phone.
+    However, DVT is designed to be a light-weight speech UI.  A voice tagging-retrieve mechanism makes it possible to do the recognition locally on the phone.
 2. Fast.  
     DVT reponds extremely fast because it is local, no time wasted to communicate with the back-end decoding cluster.
 3. Language independent.  
@@ -25,6 +25,6 @@ How is it different?
 4. Accent independent.
     DVT don't care if you have a heavy accent, it just works fine.
 5. Highly customizable.  
-    As a tagging system, users choose what to tag, what not to tag.  In principle, *all* operation can be tagged with user's voice.  Tags can be easily added, removed.
+    As a tagging system, users choose what to tag, what not to tag.  In principle, *all* operation can be tagged with user's voice.  Tags can be easily added, removed, and managed.
 6. Accurate.  
     The number of "most-frequent" operations on a mobile phone won't be large.  Say, 100 tags, DVT's recognition accuracy can reach more than 95%.
