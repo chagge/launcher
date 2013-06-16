@@ -22,7 +22,7 @@ How is it different?
     DVT reponds extremely fast because it is local, no time wasted to communicate with the back-end decoding cluster.
 3. Language independent.  
     English, Chinese, Spanish etc, you can use whatever language you like, DVT is not picky.
-4. Accent independent.
+4. Accent independent.  
     DVT don't care if you have a heavy accent, it just works fine.
 5. Highly customizable.  
     As a tagging system, users choose what to tag, what not to tag.  In principle, *all* operation can be tagged with user's voice.  Tags can be easily added, removed, and managed.
