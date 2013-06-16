@@ -1,4 +1,4 @@
 Dophist Speech Launcher
-=======================
-a general-purpose, user-customizable speech control interface.
+===
+A user-customizable speech control interface.
 ---
