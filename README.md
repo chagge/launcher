@@ -3,7 +3,7 @@ Dophist Voice-Tag
 
 What is Dophist Voice-Tag?
 ---
-Dophist Voice-Tag(DVT) is a *speech-based* UI. It allows user to tag their speech to *any* operation on their smart-phone, such as:
+Dophist Voice-Tag(DVT) is a __speech-based__ UI for smart-phone. It allows users to tag their speech to __any__ operation, such as:
 * start an app
 * make call to a friend
 * turn on/off BLUE-TOOTH
@@ -11,10 +11,12 @@ Dophist Voice-Tag(DVT) is a *speech-based* UI. It allows user to tag their speec
 * start web browser to a bookmarked web page
 etc.
 
+After tagging, users can trigger the operation by raise their phone and speak out the corresponding speech.
+
 How is it different?
 ---
 1. Local, it doesn't require internet connection.
-    Almost *all* products on the market rely on internet connection, because speech recognition is a computation-intensive task, which has to be done in back-end servers.  
+    Almost __all__ products on the market rely on internet connection, because speech recognition is a computation-intensive task, which has to be done in back-end servers.  
     However, DVT is designed to be a light-weight speech interface.  A voice tagging-retrieve mechanism makes it possible to do the recognition locally on the phone.
 2. Fast.
     DVT reponds extremely fast because it is local, no time wasted to communicate with the back-end decoding cluster.
