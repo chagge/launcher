@@ -1,0 +1,18 @@
+HERest -A -D -T 1 -I train.mlf -S train.scp -H hmm0_5/s000 -M hmm1_5 -s hmm1_5/stats -m 1 hmmlist 
+
+No HTK Configuration Parameters Set
+
+HERest  ML Updating: Transitions Means Variances 
+
+ System is PLAIN
+1 Logical/1 Physical Models Loaded, VecSize=39
+1 MMF input files
+Pruning-Off
+ Processing Data: s000.mfc; Label s000.lab
+ Utterance prob per frame = -7.067985e+01
+Saving hmm's to dir hmm1_5
+Reestimation complete - average log prob per frame = -7.067985e+01
+     - total frames seen          = 1.010000e+02
+
+No HTK Configuration Parameters Set
+

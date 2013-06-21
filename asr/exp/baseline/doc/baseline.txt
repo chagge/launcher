@@ -1,3 +1,0 @@
-Baseline system specification:
-1. MFCC features are extracted from raw wav files without VAD.
-2. HMM topology is fixed: 10 states for each HMM
