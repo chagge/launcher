@@ -168,7 +168,7 @@ for N in range(MAXN, MAXN+1):
         os.system(' '.join([
             'HCompV',
             '-T', TraceLevel,
-            '-f', '0.2',
+            '-f', '0.15',
             '-m',
             '-S', os.path.join('model', hmm, 'train.scp'),
             '-M', os.path.join('model', hmm, 'iter0'),
