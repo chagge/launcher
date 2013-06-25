@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import os,sys
-d = 'acc'
+d = '/home/jiayu/dophist/launcher/asr/exp/baseline/test/acc'
 N = 100
 for n in range(1, N+1):
 	lines = open(d + '/test'+str(n)+'.acc', 'r').readlines()

@@ -9,8 +9,8 @@ import (
 
 var (
 	FileEndian         = binary.BigEndian
-	Alpha      float64 = 3.0
-	NumNearby  int     = 5
+	Alpha      float64 = 3.5
+	NumNearby  int     = 10
 )
 
 const (
@@ -98,7 +98,7 @@ func main() {
 	eMean := sum1 / float64(M)
 	eDelta := math.Sqrt(sum2/float64(M) - eMean*eMean)
 
-	thres := eMean + Alpha*eDelta
+	bgEBound := eMean + Alpha*eDelta
 
 	// [begin, end) will cover voice activity
 	begin, end := 0, numFrame
@@ -107,7 +107,7 @@ func main() {
 		nearby := frameEs[i : i+NumNearby]
 		VA := true
 		for _, e := range nearby {
-			if e < thres {
+			if e < bgEBound {
 				VA = false
 			}
 		}
@@ -123,7 +123,7 @@ func main() {
 		nearby := frameEs[i-NumNearby : i]
 		VA := true
 		for _, e := range nearby {
-			if e < thres {
+			if e < bgEBound {
 				VA = false
 			}
 		}
@@ -132,7 +132,9 @@ func main() {
 			break
 		}
 	}
+    fmt.Println(0, len(frameEs))
 	fmt.Println(begin, end)
+    //fmt.Println(frameEs)
 	// chop
 	w.Samples = w.Samples[begin*frameLen : end*frameLen]
 	w.NumSample = len(w.Samples)
