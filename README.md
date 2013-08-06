@@ -17,10 +17,17 @@ After this voice-to-operation binding, users can trigger the operation by speaki
 
 Why voice tag?
 ---
-1. On PC and smart-phone, all operations are organized in a tree structure.
-![operation-tree](https://raw
+1. On PC and smart-phone, all operations are organized in a tree structure, this is a illustrative figure(taking iOS for example):
+![operation-tree](https://raw.github.com/dophist/launcher/master/misc/tree.png)
+In this figure, each edge represents an operation(such as screen-touch activity), each tree node represents a particular state of the system.
 
-How is it different?
+2. To complete certain task(reach a certain node in the tree), users need to travel from the root down to their target node through step by step operations(typically touch ,slide, drag).  Theoretically, given the ability of "going back to root node", users can go to any tree node from task to task, this might be the reason why there is __only one button(HOME)__ in iPhone's hardware design.  Android devices usually provide extra buttons such as "go back a level" and "settings".
+
+3. This operating mechanism is fine but not good enough. Every time a user wants to reach a node, he has to go through the path from root to the target node.  This means users waste their time repeating the path for frequently used nodes on a daily basis.
+
+4. 
+
+How is it different from other speech assistant(such as siri)?
 ---
 1. Local, it doesn't require internet connection.  
     Almost __all__ products on the market rely on internet connection, because speech recognition is a computation-intensive task, which has to be done in server-end.  
