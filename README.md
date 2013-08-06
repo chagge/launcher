@@ -8,12 +8,17 @@ Dophist Voice-Tag(DVT) is a __speech-based__ UI for PC, mobile devices. It allow
 * open a PDF/word document
 * start web browser and open a webpage
 * make call to a friend
-* turn on/off BLUE-TOOTH
+* turn on/off blue-tooth
 * retrieve a photo from gallery
 
 etc.
 
 After this voice-to-operation binding, users can trigger the operation by speaking out the tagged speech.
+
+Why voice tag?
+---
+1. On PC and smart-phone, all operations are organized in a tree structure.
+![operation-tree](https://raw
 
 How is it different?
 ---
