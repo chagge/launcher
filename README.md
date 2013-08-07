@@ -8,12 +8,15 @@ Take mobile system(android/iOS) for example:
 On top level:
 ![tree](https://raw.github.com/dophist/launcher/master/misc/toptree.png)
 
+
 Take the "Settings" child node from the above and it also has its own child nodes:
 ![tree](https://raw.github.com/dophist/launcher/master/misc/midtree1.png)
+
 
 As another example, there are also plenty of contents under the "Phone" node:
 ![tree](https://raw.github.com/dophist/launcher/master/misc/midtree2.png)
 Everytime you wake up your phone, you are in root node.  You can slide to switch screen.  And then you can start an app by touch the app icon under that screen.  After entering a certain app, there are also bunches of operations that you can perform.  
+
 
 You probably have noticed that all operations in your GUI system are organised in __an giant tree__, which I call it __operation-tree__. In this tree, each edge represents an operation(typically touch and slide on an smartphone), and each node represents a particular state of your system.
 
