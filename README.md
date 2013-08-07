@@ -1,6 +1,6 @@
 Dophist Voice-Tag
 ===
-The traditional way users interact with their mobile/PC
+Re-thought of traditional GUI
 ---
 Modern Graphical-User-Interfaces(GUI) tend to organize operations in a hierachical tree structure, this applies on both PCs and smartphones.  
 Take mobile system(android/iOS) for example:
@@ -14,22 +14,41 @@ Everytime you wake up your phone, you are in root node.  You can slide to switch
 
 You probably have noticed that all operations in your GUI system are organised in __an giant tree__, which I call it __operation-tree__. In this tree, each edge represents an operation(typically touch and slide on an smartphone), and each node represents a particular state of your system.
 
-Operation-tree could be very large, the following figure gives you a sense of the entire operation-tree, note that this picture only collects the above figures, in fact, the actual tree on your phone can be 10-100 times larger than the fowlling one:
+Operation-tree could be very large. 
+To give you a sense of what the entire operation-tree looks like, figures above are collected below:
 ![tree](https://raw.github.com/dophist/launcher/master/misc/bigtree.png)
+Note that, the actual tree on your phone can be 10-100 times larger than this.
+
+The limitation of traditional GUI
+---
+After getting this "tree-model" in mind, now let's think about the limitations of GUI.
+
+Imagine you want to complete a task(reach a node in the tree), what you have to do is to travel from root node down to your target node.  
+Now here comes the problem: what if the node is deep and this node needs to be reached quite frequently on a daily basis?  
+The fact is that users waste their time repeating meaningless operations, "travel a long way down" to some pretty frequent nodes.
+
+If you don't get this, consider why android provides some home-screen widgets for airplane-mode, WiFi, 3G, and brightness shortcuts.
 
 What is Dophist Voice-Tag?
 ---
-Dophist Voice-Tag(DVT) is a __speech-based__ UI for PC, mobile devices. It allows users to tag their speech to __any__ operation, such as:
+Dophist Voice-Tag(DVT) is a __speech-based__ UI for PC, mobile devices. It allows users to __tag a speech command to any node in the operation-tree__, such as:
+
+For mobile phone:
 * start an app/program
-* open a PDF/word document
-* start web browser and open a webpage
 * make call to a friend
+* activate airplane mode
 * turn on/off blue-tooth
 * retrieve a photo from gallery
 
+For PC:
+* start web browser and open google.com
+* open a PDF/word document
+* continue to play the movie that you didn't finish a few days ago
+* open a music player and play a particular song that you love
+* open web-brower download directory to check the file you just downloaded
 etc.
 
-After this voice-to-operation binding, users can trigger the operation by speaking out the tagged speech.
+After this voice-to-node binding, users can trigger reach the node directly by repeat the corresponding speech command.
 
 Why voice tag?
 ---
