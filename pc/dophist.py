@@ -236,10 +236,17 @@ def recognize(audio):
         DICT,
         AMLIST
         ])
+    fd = open(REC_MLF, 'r')
+    lines = fd.readlines()
+    tag = lines[2].split()[2]
+    print(tag)
+    fd.close()
+    return tag
+
 
 def run(tag):
-    #os.system('python ' + os.path.join(ASR_ROOT, 'train', tag, 'op.py'))
     print('running' + str(tag))
+    os.system('sh ' + os.path.join(ASR_ROOT, 'train', tag, 'op.sh'))
 
 def updateASR():
     tags = os.listdir(os.path.join(ASR_ROOT, 'train'))
