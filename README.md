@@ -4,10 +4,13 @@ Re-thought of traditional GUI
 ---
 Modern Graphical-User-Interfaces(GUI) tend to organize operations in a hierachical tree structure, this applies on both PCs and smartphones.  
 Take mobile system(android/iOS) for example:
+
 On top level:
 ![tree](https://raw.github.com/dophist/launcher/master/misc/toptree.png)
+
 Take the "Settings" child node from the above and it also has its own child nodes:
 ![tree](https://raw.github.com/dophist/launcher/master/misc/midtree1.png)
+
 As another example, there are also plenty of contents under the "Phone" node:
 ![tree](https://raw.github.com/dophist/launcher/master/misc/midtree2.png)
 Everytime you wake up your phone, you are in root node.  You can slide to switch screen.  And then you can start an app by touch the app icon under that screen.  After entering a certain app, there are also bunches of operations that you can perform.  
@@ -48,7 +51,7 @@ For PC:
 * open web-brower download directory to check the file you just downloaded
 etc.
 
-After this voice-to-node binding, users can trigger reach the node directly by repeat the corresponding speech command.
+After this voice-to-node binding, users can reach the node directly by repeat the corresponding speech command.
 
 Why voice tag?
 ---
