@@ -1,0 +1,17 @@
+digraph {
+    Phone -> Adam
+    Phone -> Alex
+    Phone -> Bobby
+    Phone -> David
+    Phone -> Eric
+    Phone -> Jerry
+    Phone -> Jamie
+    Phone -> Michael
+    Phone -> Tammy
+    Jerry -> CallNumber
+    Jerry -> SendMessage
+    Jerry -> FaceTime
+    Jerry -> ShareContact
+    Jerry -> AddToFavorites
+    Jerry -> Edit
+}

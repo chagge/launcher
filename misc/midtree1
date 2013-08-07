@@ -1,0 +1,21 @@
+digraph {
+    Settings -> AirplanMode
+    Settings -> WLAN
+    Settings -> Bluetooth
+    Settings -> General
+    Settings -> Sounds
+    Settings -> Brightness
+    Settings -> iClouds
+    Settings -> Safari
+    General -> Usage
+    General -> Siri
+    General -> VPN
+    General -> AutoLock
+    General -> DateAndTime
+    General -> International
+    General -> Accessibility
+    International -> Language
+    International -> VoiceControl
+    International -> Keyboards
+    International -> RegionFormat
+}
