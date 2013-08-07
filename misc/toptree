@@ -2,11 +2,11 @@ digraph {
     root -> screen_L
     root -> screen_C
     root -> screen_R
-    screen_C -> Weico
+    screen_C -> Weibo
     screen_C -> Phone
     screen_L -> Settings
     screen_L -> Camera
     screen_R -> Music
-    screen_R -> Notes
-    screen_R -> AppStore
+    screen_R -> WeChat
+    screen_R -> AngryBird
 }
