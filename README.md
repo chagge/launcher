@@ -46,14 +46,14 @@ For mobile phone:
 * retrieve a photo from gallery
 
 For PC:
-* start web browser and open google.com
+* start web browser and open youtube.com
 * open a PDF/word document
 * continue to play the movie that you didn't finish a few days ago
 * open a music player and play a particular song that you love
 * open web-brower download directory to check the file you just downloaded
 etc.
 
-After this voice-to-node binding, users can reach the node directly by repeat the corresponding speech command.
+After this voice-to-node binding, users can reach a node directly by repeat the node's associating speech command.
 
 How is it different from other speech based UI?
 ---
