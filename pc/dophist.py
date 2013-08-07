@@ -14,29 +14,33 @@ Sox_SampleRate = '8000'
 Sox_NumChannels = '1'
 Sox_BufferSize = '100'   # buffer size(in samples)
 
+# bin setup
+BIN         = os.path.join(ASR_ROOT, 'bin')
+REC         = os.path.join(BIN, 'rec')
+VAD         = os.path.join(BIN, 'vad')
+HCOMPV      = os.path.join(BIN, 'HCompV')
+HCOPY       = os.path.join(BIN, 'HCopy')
+HEREST      = os.path.join(BIN, 'HERest')
+HPARSE      = os.path.join(BIN, 'HParse')
+HVITE       = os.path.join(BIN, 'HVite')
+
 # training configuration
-BIN = os.path.join(ASR_ROOT, 'bin')
-REC = os.path.join(BIN, 'rec')
-VAD = os.path.join(BIN, 'vad')
-HCOPY = 'HCopy'
 HCOPY_CFG = os.path.join(BIN, 'hcopy.cfg')
 TRACE_LEVEL = '1'
 NumEMIter = 3
 NDIM = 12
 
 # decoding configuration
-DECODER = 'HVite'
-BNF = os.path.join(ASR_ROOT, 'decode', 'gram.bnf')
-SLF = os.path.join(ASR_ROOT, 'decode', 'gram.slf')
-DICT = os.path.join(ASR_ROOT, 'decode', 'dict')
-AMLIST = os.path.join(ASR_ROOT, 'decode', 'amlist')
-AM = os.path.join(ASR_ROOT, 'decode', 'model')
-REC_MLF = os.path.join(ASR_ROOT, 'decode', 'rec.txt')
-DECODE_SCP = os.path.join(ASR_ROOT, 'decode', 'decode.scp')
-
-decRaw = os.path.join(ASR_ROOT, 'decode', 'raw.htk')
-decVad = os.path.join(ASR_ROOT, 'decode', 'vad.htk')
-decFea = os.path.join(ASR_ROOT, 'decode', 'fea.mfc')
+BNF         = os.path.join(ASR_ROOT, 'decode', 'gram.bnf')
+SLF         = os.path.join(ASR_ROOT, 'decode', 'gram.slf')
+DICT        = os.path.join(ASR_ROOT, 'decode', 'dict')
+AMLIST      = os.path.join(ASR_ROOT, 'decode', 'amlist')
+AM          = os.path.join(ASR_ROOT, 'decode', 'model')
+REC_MLF     = os.path.join(ASR_ROOT, 'decode', 'rec.txt')
+DECODE_SCP  = os.path.join(ASR_ROOT, 'decode', 'decode.scp')
+decRaw      = os.path.join(ASR_ROOT, 'decode', 'raw.htk')
+decVad      = os.path.join(ASR_ROOT, 'decode', 'vad.htk')
+decFea      = os.path.join(ASR_ROOT, 'decode', 'fea.mfc')
 
 # global variable
 curtag = ''
@@ -175,7 +179,7 @@ def train(tag):
 
     # flat-start initialization
     subprocess.call([
-            'HCompV',
+            HCOMPV,
             '-T', TRACE_LEVEL,
             '-f', '0.15',
             '-m',
@@ -187,7 +191,7 @@ def train(tag):
     # EM iterative training
     for i in range(0, NumEMIter):
         subprocess.call([
-            'HERest',
+            HEREST,
             '-A',
             '-D',
             '-T', TRACE_LEVEL,
@@ -221,7 +225,7 @@ def recognize(audio):
         ])
 
     subprocess.call([
-        DECODER,
+        HVITE,
         '-A',
         '-D',
         '-T', TRACE_LEVEL,
@@ -231,21 +235,19 @@ def recognize(audio):
         '-i', REC_MLF, 
         '-w', SLF,
         '-p', '0.0',
-        '-n', '32', '5',
-        #'-f',    # output state alignment
+        '-n', '32', '5',    # output n-best result for further refinement
+        #'-f',              # output state alignment
         DICT,
         AMLIST
         ])
-    fd = open(REC_MLF, 'r')
-    lines = fd.readlines()
-    tag = lines[2].split()[2]
+
+    tag = open(REC_MLF, 'r').readlines()[2].split()[2]
     print(tag)
-    fd.close()
     return tag
 
 
 def run(tag):
-    print('running' + str(tag))
+    print('running ' + str(tag))
     os.system('sh ' + os.path.join(ASR_ROOT, 'train', tag, 'op.sh'))
 
 def updateASR():
@@ -263,7 +265,7 @@ def updateASR():
     fd.close()
     # create Standard Lattice File(SLF)
     subprocess.call([
-        'HParse',
+        HPARSE,
         BNF,
         SLF
     ])
@@ -299,7 +301,7 @@ def updateASR():
     fd.write(decFea + '\n')
     fd.close()
 
-def LPressCallback(event):
+def MouseL_Press(event):
     global PidRec
     cmd = [
         REC,
@@ -311,14 +313,14 @@ def LPressCallback(event):
     p = subprocess.Popen(cmd)
     PidRec = p.pid
 
-def LReleaseCallback(event):
+def MouseL_Release(event):
     global PidRec
     os.kill(PidRec, signal.SIGINT)
     time.sleep(KILL_WAIT)
     t = recognize(decRaw)
     run(t)
 
-def RPressCallback(event):
+def MouseR_Press(event):
     global curtag, PidRec
     curtag = 'T' + str(int(time.time()))
     create(curtag)
@@ -333,7 +335,7 @@ def RPressCallback(event):
     p = subprocess.Popen(cmd)
     PidRec = p.pid
 
-def RReleaseCallback(event):
+def MouseR_Release(event):
     global curtag, PidRec
     os.kill(PidRec, signal.SIGINT)
     time.sleep(KILL_WAIT)
@@ -343,11 +345,11 @@ def RReleaseCallback(event):
 
 root = Tk()
 
-frame = Frame(root, width=180, height=180)
+frame = Frame(root, width=100, height=100)
 frame.pack()
-frame.bind("<Button-1>", LPressCallback)
-frame.bind("<ButtonRelease-1>", LReleaseCallback)
-frame.bind("<Button-3>", RPressCallback)
-frame.bind("<ButtonRelease-3>", RReleaseCallback)
+frame.bind("<Button-1>", MouseL_Press)
+frame.bind("<ButtonRelease-1>", MouseL_Release)
+frame.bind("<Button-3>", MouseR_Press)
+frame.bind("<ButtonRelease-3>", MouseR_Release)
 
 root.mainloop()
