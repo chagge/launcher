@@ -3,10 +3,15 @@ Dophist Voice-Tag
 The traditional way users interact with their mobile/PC
 ---
 Modern Graphical-User-Interfaces(GUI) tend to organize operations in a hierachical tree structure, this applies on both PCs and smartphones.  Take mobile system(android/iOS) for example:
+On top level:
 ![tree](https://raw.github.com/dophist/launcher/master/misc/toptree.png)
+Take the "Settings" child node from the above and it also has its own child nodes:
 ![tree](https://raw.github.com/dophist/launcher/master/misc/midtree1.png)
+As another example, there are also plenty of contents under the "Phone" node:
 ![tree](https://raw.github.com/dophist/launcher/master/misc/midtree2.png)
-Everytime you wake up your phone, you are in root node.  You can slide to switch screen.  And then you can start an app by touch the app icon under that screen.  After entering a certain app, there are also bunches of operations that you can perform(typically buttons to touch and scroll bar to slide).  You probably have noticed that these GUI operations make up a big __operation-tree__, each edge represent an operation, and each node represent a particular state of your system.
+Everytime you wake up your phone, you are in root node.  You can slide to switch screen.  And then you can start an app by touch the app icon under that screen.  After entering a certain app, there are also bunches of operations that you can perform(typically buttons to touch and scroll bar to slide).  
+
+You probably have noticed that all operations in your GUI system are organised in __an giant tree__, which I call it _operation-tree_. In this tree, each edge represents an operation(typically touch and slide on an smartphone), and each node represents a particular state of your system.
 
 ![tree](https://raw.github.com/dophist/launcher/master/misc/bigtree.png)
 
