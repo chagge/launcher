@@ -27,10 +27,12 @@ The limitation of traditional GUI
 After getting this "tree-model" in mind, now let's think about the limitations of GUI.
 
 Imagine you want to complete a task(reach a node in the tree), what you have to do is to travel from root node down to your target node.  
-Now here comes the problem: what if the node is deep and this node needs to be reached quite frequently on a daily basis?  
+
+Now here comes the problem: what if a node is deep but it needs to be reached quite frequently on a daily basis?  
+
 The fact is that users waste their time repeating meaningless operations, "travel a long way down" to some pretty frequent nodes.
 
-If you don't get this, consider why android provides some home-screen widgets for airplane-mode, WiFi, 3G, and brightness shortcuts.
+If you don't get this, consider why android provides some home-screen shortcuts (or widgets) for airplane-mode, WiFi, 3G, and brightness setting.
 
 What is Dophist Voice-Tag?
 ---
@@ -53,19 +55,7 @@ etc.
 
 After this voice-to-node binding, users can reach the node directly by repeat the corresponding speech command.
 
-Why voice tag?
----
-1. On PC and smart-phone, all operations are organized in a tree structure, this is a illustrative figure(taking iOS for example):
-![operation-tree](https://raw.github.com/dophist/launcher/master/misc/tree.png)
-In this figure, each edge represents an operation(such as screen-touch activity), each tree node represents a particular state of the system.
-
-2. To complete certain task(reach a certain node in the tree), users need to travel from the root down to their target node through step by step operations(typically touch ,slide, drag).  Theoretically, given the ability of "going back to root node", users can go to any tree node from task to task, this might be the reason why there is __only one button(HOME)__ in iPhone's hardware design.  Android devices usually provide extra buttons such as "go back a level" and "settings".
-
-3. This operating mechanism is fine but not good enough. Every time a user wants to reach a node, he has to go through the path from root to the target node.  This means users waste their time repeating the path for frequently used nodes on a daily basis.
-
-4. 
-
-How is it different from other speech assistant(such as siri)?
+How is it different from other speech based UI?
 ---
 1. Local, it doesn't require internet connection.  
     Almost __all__ products on the market rely on internet connection, because speech recognition is a computation-intensive task, which has to be done in server-end.  
