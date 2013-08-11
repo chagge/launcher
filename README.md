@@ -9,7 +9,7 @@ On top level:
 ![tree](https://raw.github.com/dophist/launcher/master/misc/toptree.png)
 
 
-Take the "Settings" child node from the above and it also has its own child nodes:
+Child nodes from the above(such as "Settings") also have their own children:
 ![tree](https://raw.github.com/dophist/launcher/master/misc/midtree1.png)
 
 
