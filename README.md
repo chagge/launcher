@@ -2,7 +2,7 @@ Dophist Voice-Tag
 ===
 A thought on GUI
 ---
-Graphical-User-Interface(GUI) has been proven to be an effective and intuitive mechanism to organize and exhibit software operations, both on PC and smart-phone.
+Graphical-User-Interface(GUI) has been proven to be an effective and intuitive mechanism to organize and exhibit system/software operations, both on PC and smart-phone.
 
 Why does GUI gain so much popularity?  One important reason is that GUI tries to organize possible operations in a carefully designed __tree-structure__.
 
@@ -12,36 +12,40 @@ On top level:
 ![tree](https://raw.github.com/dophist/launcher/master/misc/toptree.png)
 
 
-Child nodes from the above(such as "Settings") also have their own children:
+Child nodes from the above(such as "Settings") also have its own children:
 ![tree](https://raw.github.com/dophist/launcher/master/misc/midtree1.png)
 
 
-As another example, the subtree below "Phone" node:
+As another example, the subtree of "Phone" node:
 ![tree](https://raw.github.com/dophist/launcher/master/misc/midtree2.png)
-Everytime you wake up your phone, you are in root node.  You can slide to switch screen.  And then you can start an app by touch the app icon under that screen.  After entering a certain app, there are also bunches of operations that you can perform.  
 
+You probably have noticed that all operations in your GUI system are organised in __an giant tree__, which I called __operation-tree__.  In this tree, each edge represents an operation (typically touch and slide on an smartphone), and each node represents a particular state of your system/software.  
 
-You probably have noticed that all operations in your GUI system are organised in __an giant tree__, which I called __operation-tree__.  In this tree, each edge represents an operation (typically touch and slide on an smartphone), and each node represents a particular state of your system/software.  So, related operations are layered and grouped, making the all functionalities self-evident.  
+GUI is a smart design in the sense that it groups related operations layered by layer, making the all functionalities self-evident.  
 
-Operation-tree could be very large. 
-To give you a sense of what the entire operation-tree looks like, figures above are collected below:
+To give you a sense of what the entire operation-tree looks like, figures above are collected together:
 ![tree](https://raw.github.com/dophist/launcher/master/misc/bigtree.png)
-Note that, the actual tree on your phone can be 10-100 times larger than this.
+
+Note that, operation-tree could be very large, the actual tree on your phone can be 10-100 times larger than this.
 
 Limitation of GUI
 ---
 Keeping this "tree-model" in mind, it's now possible to consider one important limitation of GUI:
 
-To organize the content of a whole system/software in a tree structure, you have a design problem: 
+To organize the content of a whole system/software in a tree, you have a design problem:
+
 1) _make the tree deep:_
-    This means that to reach a node, you need more operations to travel down to your target node.
+
+    This means that to reach a node, you need more operations to "travel down" to your target node.
+
 2) _make the tree broad:_
+
     This means that you need to distinguish your target node in the broad layer: consider finding a PDF in a directory containing 100 PDFs in PC, or finding a friend in your mobile contact.
 
 Deepness or broadness, this is a limitation that GUI can't resolve, so here comes the problem:
 __what if a node is buried so deep or hidded in a very broad layer, but it needs to be reached quite often?__
 
-The fact is that GUI users waste their time repeating meaningless operations, "travel down or searching" to perform some pretty frequent task.
+The fact is that GUI users waste their time, repeating meaningless operations, "travel down or searching" to perform some pretty frequent tasks.
 
 If you don't get this, consider why android provides some home-screen shortcuts (or widgets) for airplane-mode, WiFi, 3G, and brightness setting; or many PC users place massive shortcuts and documents on their desktop.
 
