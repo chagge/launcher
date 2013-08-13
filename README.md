@@ -30,7 +30,7 @@ Note that, operation-tree could be very large, the actual tree on your phone can
 
 Limitation of GUI
 ---
-Keeping this "tree-model" in mind, it's now possible to consider one important limitation of GUI:
+Keeping this "tree-model" in mind, it's now possible to consider one important limitation of GUI.
 
 To organize the content of a whole system/software in a tree, you have a design problem:
 
@@ -43,6 +43,7 @@ This means that to reach a node, you need more operations to "travel down" to yo
 This means that you need to distinguish your target node in the broad layer: consider finding a PDF in a directory containing 100 PDFs in PC, or finding a friend in your mobile contact.
 
 Deepness or broadness, this is a limitation that GUI can't resolve, so here comes the problem:
+
 __what if a node is buried so deep or hidded in a very broad layer, but it needs to be reached quite often?__
 
 The fact is that GUI users waste their time, repeating meaningless operations, "travel down or searching" to perform some pretty frequent tasks.
