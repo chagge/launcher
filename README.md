@@ -36,11 +36,11 @@ To organize the content of a whole system/software in a tree, you have a design 
 
 1) _make the tree deep:_
 
-    This means that to reach a node, you need more operations to "travel down" to your target node.
+This means that to reach a node, you need more operations to "travel down" to your target node.
 
 2) _make the tree broad:_
 
-    This means that you need to distinguish your target node in the broad layer: consider finding a PDF in a directory containing 100 PDFs in PC, or finding a friend in your mobile contact.
+This means that you need to distinguish your target node in the broad layer: consider finding a PDF in a directory containing 100 PDFs in PC, or finding a friend in your mobile contact.
 
 Deepness or broadness, this is a limitation that GUI can't resolve, so here comes the problem:
 __what if a node is buried so deep or hidded in a very broad layer, but it needs to be reached quite often?__
