@@ -71,7 +71,7 @@ For PC:
 * open a PDF/word document
 * continue to play the movie that you didn't finish a few days ago
 * open a music player and play a particular song that you love
-* open web-brower download directory to check the file you just downloaded
+* open download directory of your web-browser to check the file you just downloaded
 etc.
 
 
