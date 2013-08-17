@@ -55,6 +55,10 @@ What is Dophist Voice-Tag?
 Dophist Voice-Tag(DVT) is a __speech-based__ UI for PC, mobile devices. It allows users to __tag a speech command to any node in the operation-tree__:
 ![launcher](https://raw.github.com/dophist/launcher/master/misc/launcher.png)
 
+
+After this voice-to-node tagging, users can trigger a node directly by repeat the node's speech command.
+
+
 For mobile phone:
 * start an app/program
 * make call to a friend
@@ -70,7 +74,6 @@ For PC:
 * open web-brower download directory to check the file you just downloaded
 etc.
 
-After this voice-to-node binding, users can reach a node directly by repeat the node's associating speech command.
 
 How is it different from other speech based UI?
 ---

@@ -1,13 +1,15 @@
 digraph G {
     subgraph cluster_dophist {
-        label = "dophist"
+        label = "dophist" 
+        fontsize = 24
         color = purple
         launcher
     }
     subgraph cluster_optree {
-        node [style=filled, color=grey];
-        color = blue
         label = "operation-tree"
+        fontsize = 24
+        color = blue
+        node [style=filled, color=grey];
 
         n0 -> n11
         n0 -> n12
