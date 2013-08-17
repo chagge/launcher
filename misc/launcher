@@ -1,0 +1,47 @@
+digraph G {
+    subgraph cluster_dophist {
+        label = "dophist"
+        color = purple
+        launcher
+    }
+    subgraph cluster_optree {
+        node [style=filled, color=grey];
+        color = blue
+        label = "operation-tree"
+
+        n0 -> n11
+        n0 -> n12
+        n0 -> n13
+        n11 -> n21
+        n11 -> n22
+        n11 -> n23
+        n12 -> n24
+        n12 -> n25
+        n13 -> n26
+        n13 -> n27
+        n13 -> n28
+        n22 -> n31
+        n22 -> n32
+        n22 -> n33
+        n22 -> n34
+        n22 -> n35
+        n22 -> n36
+        n22 -> n37
+        n25 -> n38
+        n25 -> n39
+        n28 -> n310
+        n28 -> n311
+        n28 -> n312
+        n34 -> n41
+        n34 -> n42
+        n34 -> n43
+        n39 -> n44
+        n39 -> n45
+        n39 -> n46
+        n39 -> n47
+    }
+    edge [color=red]
+    launcher -> n312 [label = "voice_tag1", style=dashed]
+    launcher -> n26 [label = "voice_tag2", style=dashed]
+    launcher -> n46 [label = "voice_tag3", style=dashed]
+}
