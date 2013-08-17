@@ -52,7 +52,8 @@ If you don't get this, consider why android provides some home-screen shortcuts 
 
 What is Dophist Voice-Tag?
 ---
-Dophist Voice-Tag(DVT) is a __speech-based__ UI for PC, mobile devices. It allows users to __tag a speech command to any node in the operation-tree__, such as:
+Dophist Voice-Tag(DVT) is a __speech-based__ UI for PC, mobile devices. It allows users to __tag a speech command to any node in the operation-tree__:
+![launcher](https://raw.github.com/dophist/launcher/master/misc/launcher.png)
 
 For mobile phone:
 * start an app/program
