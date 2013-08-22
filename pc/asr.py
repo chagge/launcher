@@ -335,13 +335,14 @@ def Remove(tag):
 
 def GetTagList():
     return os.listdir(os.path.join(ASR_ROOT, 'train'))
-def GetAllUtts(tag):
+def GetUttList(tag):
     return os.listdir(os.path.join(ASR_ROOT, 'train', tag, 'utt', 'raw'))
-def GetScript(tag):
-    fd = open(os.path.join(ASR_ROOT, 'train', tag, 'op.sh'), 'w+')
-    content = fd.readlines()
-    fd.close()
-    return content
+def GetOperation(tag):
+    opfile = os.path.join(ASR_ROOT, 'train', tag, 'op.sh')
+    if os.path.exists(opfile):
+        lines = open(opfile, 'r').readlines()
+        return lines
+    return []
 def PlayUtt(tag, utt):
     print('playing ' + os.path.join(ASR_ROOT, 'train', tag, 'utt', 'raw', utt))
     subprocess.call([

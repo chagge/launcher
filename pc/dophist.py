@@ -8,6 +8,7 @@ import asr
 # global variable
 RecordingPID = 0
 
+# ------------------  -----------------------------
 def MouseL_Press(event):
     global RecordingPID
     RecordingPID = asr.StartRecordingForRecognition()
@@ -17,43 +18,80 @@ def MouseL_Release(event):
     tag = asr.Recognize()
     asr.Run(tag)
 
+# ------------------ tag manager window -----------------------
 def MouseR_Click(event):
     managerWindow = Toplevel(root)
+    frame  = Frame(managerWindow)
+    frame.pack()
+
+    listbox_tag   = Listbox(frame, height=22, selectmode='SINGLE')
     tagList = asr.GetTagList()
-    c = Frame(managerWindow)
-    c.pack()
-
-    tagListbox = Listbox(c,height=22, width=25, activestyle = 'underline')
     for tag in tagList:
-        tagListbox.insert(END, tag)
-    uttListbox = Listbox(c, height=22, activestyle = 'underline')
-    scriptText   = Text(c)
+        listbox_tag.insert(END, tag)
 
-    addTagButton     = Button(c, text = 'Add tag', command = lambda:addTag(tagListbox))
-    delTagButton     = Button(c, text = 'Del tag', command = lambda:delTag(tagListbox))
-    playUttButton    = Button(c, text = 'Play', command = lambda : playUtt(tagListbox, uttListbox))
-    addUttButton     = Button(c, text = 'Add')
-    delUttButton     = Button(c, text = 'Del', command = lambda : delUtt(tagListbox, uttListbox))
-    saveScriptButton = Button(c, text = 'Save', command = lambda : saveScript(tagListbox, scriptText))
-    updataButton     = Button(c, text = 'Update Model', command = lambda : trainUpdate())
+    listbox_utt = Listbox(frame, height=22, selectmode='SINGLE')
+    text_operation = Text(frame)
 
-    tagListbox.grid(row=0, column=0, columnspan=2)
-    uttListbox.grid(row=0, column=2, columnspan=3)
-    scriptText.grid(row = 0, column = 5)
-    addTagButton.grid(row=1, column=0)
-    delTagButton.grid(row=1, column=1)
-    playUttButton.grid(row=1, column=2)
-    addUttButton.grid(row=1, column=3)
-    delUttButton.grid(row=1, column=4)
-    saveScriptButton.grid(row=1, column = 5)
-    updataButton.grid(row=3, column = 0, columnspan = 5)
+    button_addTag = Button(
+            frame, 
+            text = 'Add tag', 
+            command = lambda : addTag(listbox_tag)
+            )
 
-    tagListbox.bind('<<ListboxSelect>>', lambda event : changeTag(tagListbox, uttListbox, scriptText))
+    button_delTag = Button(
+            frame, 
+            text = 'Del tag', 
+            command = lambda : delTag(listbox_tag)
+            )
 
-    addUttButton.bind('<Button-1>', lambda event : addUttStart(tagListbox, uttListbox))
-    addUttButton.bind('<ButtonRelease-1>', lambda event : addUttEnd())
+    button_playUtt = Button(
+            frame, 
+            text = 'Play', 
+            command = lambda : playUtt(listbox_tag, listbox_utt)
+            )
+
+    button_addUtt  = Button(
+            frame, 
+            text = 'Add'
+            )
+    button_addUtt.bind('<Button-1>', lambda event : addUttPress(listbox_tag, listbox_utt))
+    button_addUtt.bind('<ButtonRelease-1>', lambda event : addUttRelease())
+
+    button_delUtt = Button(
+            frame, 
+            text = 'Del', 
+            command = lambda : delUtt(listbox_tag, listbox_utt)
+            )
+
+    button_saveOperation = Button(
+            frame, 
+            text = 'Save', 
+            command = lambda : saveOperation(listbox_tag, text_operation)
+            )
+
+    button_update = Button(
+            frame, 
+            text = 'Update Model', 
+            command = lambda : update()
+            )
+
+    listbox_tag.bind('<<ListboxSelect>>', lambda event : changeTag(listbox_tag, listbox_utt, text_operation))
+
+    # widgets layout
+    listbox_tag.grid(row=0, column=0, columnspan=2)
+    listbox_utt.grid(row=0, column=2, columnspan=3)
+    text_operation.grid(row = 0, column = 5)
+    button_addTag.grid(row=1, column=0)
+    button_delTag.grid(row=1, column=1)
+    button_playUtt.grid(row=1, column=2)
+    button_addUtt.grid(row=1, column=3)
+    button_delUtt.grid(row=1, column=4)
+    button_saveOperation.grid(row=1, column = 5)
+    button_update.grid(row=3, column = 0, columnspan = 5)
 
 
+
+#----------------- GUI event handlers ----------------------------
 def addTag(lb):
     t = time.time()
     tag = 'T' + str(int(t * 10))
@@ -62,86 +100,59 @@ def addTag(lb):
     lb.activate(END)
 
 def delTag(lb):
-    idxs = lb.curselection()
-    for i in idxs:
-        tag = lb.get(i)
-        asr.Remove(tag)
-        lb.delete(i)
+    tag = lb.get(ACTIVE)
+    asr.Remove(tag)
+    lb.delete(ACTIVE)
 
-def changeTag(taglb, uttlb, script):
-    i = taglb.curselection()
-    tag = taglb.get(i)
-    utts = asr.GetAllUtts(tag)
+def changeTag(taglb, uttlb, text_operation):
+    tag = taglb.get(taglb.curselection())
+    print(tag)
+    uttList = asr.GetUttList(tag)
 
     uttlb.delete(0, END)
-    for utt in utts:
+    for utt in uttList:
         uttlb.insert(END, utt)
 
-    script.delete('1.0', END)
-    lines = asr.GetScript(tag)
+    text_operation.delete('1.0', END)
+    lines = asr.GetOperation(tag)
     for l in lines:
-        script.insert(END, l)
+        text_operation.insert(END, l)
 
-def addUttStart(taglb, uttlb):
+def addUttPress(taglb, uttlb):
     global RecordingPID
     t = time.time()
-    utt = 'S' + str(int(t*10)) + '.htk'
     tag = taglb.get(ACTIVE)
+    utt = 'S' + str(int(t*10)) + '.htk'
     RecordingPID = asr.StartRecordingUtt(tag, utt)
     uttlb.insert(END, utt)
+    uttlb.activate(END)
 
-def addUttEnd():
+def addUttRelease():
     global RecordingPID
     asr.EndRecordingUtt(RecordingPID)
 
 def playUtt(taglb, uttlb):
     ti = taglb.get(ACTIVE)
     ui = uttlb.get(ACTIVE)
-    #print(ti, ui)
+    print(ti, ui)
     asr.PlayUtt(ti, ui)
 
-def addUtt(taglb, uttlb):
-    global RecordingPID
-    tag = taglb.get(ACTIVE)
-    asr.StartRecordingForTag(tag)
 
 def delUtt(taglb, uttlb):
     ti = taglb.get(ACTIVE)
     ui = uttlb.get(ACTIVE)
     asr.RemoveUtt(ti, ui)
     uttlb.delete(ACTIVE)
+    uttlb.activate(END)
 
-def saveScript(taglb, text):
+def saveOperation(taglb, text):
     op = text.get('1.0', END)
     tag = taglb.get(ACTIVE)
     asr.WriteOperation(tag, op)
 
-def trainUpdate():
+def update():
     asr.TrainAll()
     asr.UpdateASR()
-
-#def MouseR_Press(event):
-#    global curtag, RecordingPID
-#    curtag = 'T' + str(int(time.time()))
-#    create(curtag)
-#    utt = os.path.join(ASR_ROOT, 'train', curtag, 'utt', 'raw', curtag+'.htk')
-#    cmd = [
-#        REC,
-#        '-r' , SampleRate,
-#        '-c',  NumChannels,
-#        '--buffer', BufferSize,
-#        utt
-#        ]
-#    p = subprocess.Popen(cmd)
-#    RecordingPID = p.pid
-#
-#def MouseR_Release(event):
-#    global curtag, RecordingPID
-#    os.kill(RecordingPID, signal.SIGINT)
-#    time.sleep(KILL_WAIT)
-#    #os.system('kill -s 2 ' + str(RecordingPID))
-#    train(curtag)
-#    updateASR()
 
 root = Tk()
 
