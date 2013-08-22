@@ -1,347 +1,147 @@
 #!/usr/bin/python
 from Tkinter import *
-import subprocess
-import signal
-import os
 import time
-import struct
+import sys
+import asr
 
-ASR_ROOT = '/home/jiayu/dophist/launcher/pc/ASR_ROOT'
-KILL_WAIT = 0.5
-
-# sox configuration
-Sox_SampleRate = '8000'
-Sox_NumChannels = '1'
-Sox_BufferSize = '100'   # buffer size(in samples)
-
-# bin setup
-BIN         = os.path.join(ASR_ROOT, 'bin')
-REC         = os.path.join(BIN, 'rec')
-VAD         = os.path.join(BIN, 'vad')
-HCOMPV      = os.path.join(BIN, 'HCompV')
-HCOPY       = os.path.join(BIN, 'HCopy')
-HEREST      = os.path.join(BIN, 'HERest')
-HPARSE      = os.path.join(BIN, 'HParse')
-HVITE       = os.path.join(BIN, 'HVite')
-
-# training configuration
-HCOPY_CFG = os.path.join(BIN, 'hcopy.cfg')
-TRACE_LEVEL = '1'
-NumEMIter = 3
-NDIM = 12
-
-# decoding configuration
-BNF         = os.path.join(ASR_ROOT, 'decode', 'gram.bnf')
-SLF         = os.path.join(ASR_ROOT, 'decode', 'gram.slf')
-DICT        = os.path.join(ASR_ROOT, 'decode', 'dict')
-AMLIST      = os.path.join(ASR_ROOT, 'decode', 'amlist')
-AM          = os.path.join(ASR_ROOT, 'decode', 'model')
-REC_MLF     = os.path.join(ASR_ROOT, 'decode', 'rec.txt')
-DECODE_SCP  = os.path.join(ASR_ROOT, 'decode', 'decode.scp')
-decRaw      = os.path.join(ASR_ROOT, 'decode', 'raw.htk')
-decVad      = os.path.join(ASR_ROOT, 'decode', 'vad.htk')
-decFea      = os.path.join(ASR_ROOT, 'decode', 'fea.mfc')
 
 # global variable
-curtag = ''
-PidRec = 0
-
-def GetNumState(tag):
-    tagRoot = os.path.join(ASR_ROOT, 'train', tag)
-    NumFrames = 0
-    fs = os.listdir(os.path.join(tagRoot, 'utt', 'fea'))
-    for f in fs:
-        fd = open(os.path.join(tagRoot, 'utt', 'fea', f), 'rb')
-        NumFrames += struct.unpack('>i', fd.read(4))[0]  #for Big-Endian
-        fd.close()
-    NumFiles = len(fs)
-    NumStates = int(float(NumFrames)/NumFiles/6)
-    print(NumStates)
-    return NumStates
-
-def CreateHMMTopology(tag, ns, nd):
-    tagRoot = os.path.join(ASR_ROOT, 'train', tag)
-    fd = open(os.path.join(tagRoot, 'am', 'proto', tag), 'w+')
-    mean = ''
-    var  = ''
-    for k in range(0, nd):
-        mean += '0.0 '
-        var  += '1.0 '
-
-    fd.write(''.join([
-        '~o <VecSize> ' + str(nd) + ' <MFCC_Z>\n', 
-        '~h "{}"\n'.format(tag),
-        '<BeginHMM>\n',
-        '<NumStates> ' + str(ns) + '\n'
-        ]))
-
-    for s in range(2, ns):  # first and last are non-emitting states
-        fd.write(''.join([
-            '<State> ' + str(s) + '\n',
-            '\t<Mean> ' + str(nd) + '\n',
-            '\t' + mean + '\n',
-            '\t<Variance> ' + str(nd) + '\n',
-            '\t' + var + '\n'
-        ]))
-
-    # construct TransP
-    fd.write('<TransP> ' + str(ns) + '\n')
-    for s in range(0, ns):   # TransP matrix covers states [1,max]
-        row = []
-        for k in range(0, ns):
-            row.append('0.0')
-
-        if s == 0:
-            row[1] = '1.0'
-        elif s != (ns -1):
-            row[s]   = '0.9'
-            row[s+1] = '0.1'
-
-        fd.write('\t' + ' '.join(row) + '\n')
-    fd.write('<EndHMM>\n')
-    fd.close()
-
-def create(tag):
-    os.makedirs(os.path.join(ASR_ROOT, 'train', tag))
-    os.makedirs(os.path.join(ASR_ROOT, 'train', tag, 'utt'))
-    os.makedirs(os.path.join(ASR_ROOT, 'train', tag, 'utt', 'raw'))
-    os.makedirs(os.path.join(ASR_ROOT, 'train', tag, 'utt', 'vad'))
-    os.makedirs(os.path.join(ASR_ROOT, 'train', tag, 'utt', 'fea'))
-    os.makedirs(os.path.join(ASR_ROOT, 'train', tag, 'am'))
-    os.makedirs(os.path.join(ASR_ROOT, 'train', tag, 'am', 'proto'))
-    for i in range(0, NumEMIter+1):  # [0, NumEMIter]
-        os.mkdir(os.path.join(ASR_ROOT, 'train', tag, 'am', 'iter'+str(i)))
- 
-#def addUtterToTag(audio, tag):
-
-def train(tag):
-    tagRoot = os.path.join(ASR_ROOT, 'train', tag)
-    # amlist
-    fd = open(os.path.join(tagRoot, 'amlist'), 'w+')
-    fd.write(tag + '\n')
-    fd.close()
-    # dict
-    fd = open(os.path.join(tagRoot, 'dict'), 'w+')
-    fd.write(tag + '\t' + tag + '\n')
-    fd.close()
-    # mlf
-    fd = open(os.path.join(tagRoot, 'train.mlf'), 'w+')
-    buf = '\n'.join([
-        '#!MLF!#',
-        '"{}"'.format(os.path.join(tagRoot,'utt','fea','*.lab')),
-        tag,
-        '.\n'
-        ])
-    fd.write(buf)
-    fd.close()
-
-    # VAD: raw -> vad
-    for f in os.listdir(os.path.join(tagRoot, 'utt', 'raw')):
-        cmd = [
-                VAD,
-                os.path.join(tagRoot, 'utt', 'raw', f),
-                os.path.join(tagRoot, 'utt', 'vad', f)
-              ]
-        print(cmd)
-        subprocess.call(cmd)
-
-    # feature extraction: vad -> fea 
-    hcopy_scp = os.path.join(tagRoot, 'utt', 'hcopy.scp')
-    fd = open(hcopy_scp, 'w+')
-    for f in os.listdir(os.path.join(tagRoot, 'utt', 'vad')):
-        [name, ext] = f.split('.')
-        buf = ' '.join([
-            os.path.join(tagRoot, 'utt', 'vad', f),
-            os.path.join(tagRoot, 'utt', 'fea', name+'.mfc'),
-            '\n'
-            ])
-        fd.write(buf)
-    fd.close()
-    cmd = [
-            HCOPY,
-            '-A',
-            '-D',
-            '-T', '3',
-            '-C', HCOPY_CFG,
-            '-S', hcopy_scp,
-          ]
-    subprocess.call(cmd)
-
-    # train.scp
-    train_scp = os.path.join(tagRoot, 'train.scp')
-    fd = open(train_scp, 'w+')
-    for f in os.listdir(os.path.join(tagRoot, 'utt', 'fea')):
-        fd.write(os.path.join(tagRoot, 'utt', 'fea', f) + '\n')
-    fd.close()
-
-    ns = GetNumState(tag)
-    CreateHMMTopology(tag, ns, NDIM)
-
-    # flat-start initialization
-    subprocess.call([
-            HCOMPV,
-            '-T', TRACE_LEVEL,
-            '-f', '0.15',
-            '-m',
-            '-S', train_scp,
-            '-M', os.path.join(tagRoot, 'am', 'iter0'),
-            os.path.join(tagRoot, 'am', 'proto', tag)
-            ])
-
-    # EM iterative training
-    for i in range(0, NumEMIter):
-        subprocess.call([
-            HEREST,
-            '-A',
-            '-D',
-            '-T', TRACE_LEVEL,
-            '-I', os.path.join(tagRoot, 'train.mlf'),
-            '-S', os.path.join(tagRoot, 'train.scp'),
-            '-m', '1',
-            '-H', os.path.join(tagRoot, 'am', 'iter{}'.format(i), tag),
-            '-H', os.path.join(tagRoot, 'am', 'iter{}'.format(i), 'vFloors'),
-            '-M', os.path.join(tagRoot, 'am', 'iter{}'.format(i+1)),
-            os.path.join(tagRoot, 'amlist')
-        ])
-
-def remove(tag):
-    os.system('rm -rf ' + os.path.join(ASR_ROOT, 'train', tag))
-
-def recognize(audio):
-    decoderRoot = os.path.join(ASR_ROOT, 'decode')
-    subprocess.call([
-        VAD,
-        os.path.join(decoderRoot, decRaw),
-        os.path.join(decoderRoot, decVad)
-        ])
-    
-    subprocess.call([
-        HCOPY,
-        '-A',
-        '-D',
-        '-T', TRACE_LEVEL,
-        '-C', HCOPY_CFG,
-        '-S', os.path.join(decoderRoot, 'hcopy.scp')
-        ])
-
-    subprocess.call([
-        HVITE,
-        '-A',
-        '-D',
-        '-T', TRACE_LEVEL,
-        '-S', DECODE_SCP,
-        '-H', os.path.join(decoderRoot, 'model'),
-        '-l', '*',
-        '-i', REC_MLF, 
-        '-w', SLF,
-        '-p', '0.0',
-        '-n', '32', '5',    # output n-best result for further refinement
-        #'-f',              # output state alignment
-        DICT,
-        AMLIST
-        ])
-
-    tag = open(REC_MLF, 'r').readlines()[2].split()[2]
-    print(tag)
-    return tag
-
-
-def run(tag):
-    print('running ' + str(tag))
-    os.system('sh ' + os.path.join(ASR_ROOT, 'train', tag, 'op.sh'))
-
-def updateASR():
-    tags = os.listdir(os.path.join(ASR_ROOT, 'train'))
-    print(tags)
-    # create amlist
-    fd = open(AMLIST, 'w+')
-    for t in tags:
-        fd.write(t + '\n')
-    fd.close()
-    # create BNF grammar
-    fd = open(BNF, 'w+')
-    buf = '$command = ' + ' | \n'.join(tags) + ';\n' + '($command)\n'
-    fd.write(buf)
-    fd.close()
-    # create Standard Lattice File(SLF)
-    subprocess.call([
-        HPARSE,
-        BNF,
-        SLF
-    ])
-    # create dictionary
-    fd = open(DICT, 'w+')
-    for tag in tags:
-        buf = tag + '\t' + tag + '\n'
-        fd.write(buf)
-    fd.close()
-    # collect tag models
-    if os.path.isfile(AM):
-        os.remove(AM)
-        os.system('touch ' + AM)
-    for tag in tags:
-        cmd = [
-            'cat',
-            os.path.join(ASR_ROOT, 'train', tag, 'am', 'iter'+str(NumEMIter), tag),
-            '>>',
-            AM
-        ]
-        os.system(' '.join(cmd))
-    # hcopy.scp in decoder
-    fd = open(os.path.join(ASR_ROOT, 'decode', 'hcopy.scp'), 'w+')
-    fd.write(' '.join([
-        decVad,
-        '\t',
-        decFea,
-        '\n',
-        ]))
-    fd.close()
-    # decode.scp
-    fd = open(os.path.join(ASR_ROOT, 'decode', 'decode.scp'), 'w+')
-    fd.write(decFea + '\n')
-    fd.close()
+RecordingPID = 0
 
 def MouseL_Press(event):
-    global PidRec
-    cmd = [
-        REC,
-        '-r' , Sox_SampleRate,
-        '-c',  Sox_NumChannels,
-        '--buffer', Sox_BufferSize,
-        decRaw
-        ]
-    p = subprocess.Popen(cmd)
-    PidRec = p.pid
-
+    global RecordingPID
+    RecordingPID = asr.StartRecordingForRecognition()
 def MouseL_Release(event):
-    global PidRec
-    os.kill(PidRec, signal.SIGINT)
-    time.sleep(KILL_WAIT)
-    t = recognize(decRaw)
-    run(t)
+    global RecordingPID
+    asr.EndRecordingForRecognition(RecordingPID)
+    tag = asr.Recognize()
+    asr.Run(tag)
 
-def MouseR_Press(event):
-    global curtag, PidRec
-    curtag = 'T' + str(int(time.time()))
-    create(curtag)
-    utt = os.path.join(ASR_ROOT, 'train', curtag, 'utt', 'raw', curtag+'.htk')
-    cmd = [
-        REC,
-        '-r' , Sox_SampleRate,
-        '-c',  Sox_NumChannels,
-        '--buffer', Sox_BufferSize,
-        utt
-        ]
-    p = subprocess.Popen(cmd)
-    PidRec = p.pid
+def MouseR_Click(event):
+    managerWindow = Toplevel(root)
+    tagList = asr.GetTagList()
+    c = Frame(managerWindow)
+    c.pack()
 
-def MouseR_Release(event):
-    global curtag, PidRec
-    os.kill(PidRec, signal.SIGINT)
-    time.sleep(KILL_WAIT)
-    #os.system('kill -s 2 ' + str(PidRec))
-    train(curtag)
-    updateASR()
+    tagListbox = Listbox(c,height=22, width=25, activestyle = 'underline')
+    for tag in tagList:
+        tagListbox.insert(END, tag)
+    uttListbox = Listbox(c, height=22, activestyle = 'underline')
+    scriptText   = Text(c)
+
+    addTagButton     = Button(c, text = 'Add tag', command = lambda:addTag(tagListbox))
+    delTagButton     = Button(c, text = 'Del tag', command = lambda:delTag(tagListbox))
+    playUttButton    = Button(c, text = 'Play', command = lambda : playUtt(tagListbox, uttListbox))
+    addUttButton     = Button(c, text = 'Add')
+    delUttButton     = Button(c, text = 'Del', command = lambda : delUtt(tagListbox, uttListbox))
+    saveScriptButton = Button(c, text = 'Save', command = lambda : saveScript(tagListbox, scriptText))
+    updataButton     = Button(c, text = 'Update Model', command = lambda : trainUpdate())
+
+    tagListbox.grid(row=0, column=0, columnspan=2)
+    uttListbox.grid(row=0, column=2, columnspan=3)
+    scriptText.grid(row = 0, column = 5)
+    addTagButton.grid(row=1, column=0)
+    delTagButton.grid(row=1, column=1)
+    playUttButton.grid(row=1, column=2)
+    addUttButton.grid(row=1, column=3)
+    delUttButton.grid(row=1, column=4)
+    saveScriptButton.grid(row=1, column = 5)
+    updataButton.grid(row=3, column = 0, columnspan = 5)
+
+    tagListbox.bind('<<ListboxSelect>>', lambda event : changeTag(tagListbox, uttListbox, scriptText))
+
+    addUttButton.bind('<Button-1>', lambda event : addUttStart(tagListbox, uttListbox))
+    addUttButton.bind('<ButtonRelease-1>', lambda event : addUttEnd())
+
+
+def addTag(lb):
+    t = time.time()
+    tag = 'T' + str(int(t * 10))
+    asr.Create(tag)
+    lb.insert(END, tag)
+    lb.activate(END)
+
+def delTag(lb):
+    idxs = lb.curselection()
+    for i in idxs:
+        tag = lb.get(i)
+        asr.Remove(tag)
+        lb.delete(i)
+
+def changeTag(taglb, uttlb, script):
+    i = taglb.curselection()
+    tag = taglb.get(i)
+    utts = asr.GetAllUtts(tag)
+
+    uttlb.delete(0, END)
+    for utt in utts:
+        uttlb.insert(END, utt)
+
+    script.delete('1.0', END)
+    lines = asr.GetScript(tag)
+    for l in lines:
+        script.insert(END, l)
+
+def addUttStart(taglb, uttlb):
+    global RecordingPID
+    t = time.time()
+    utt = 'S' + str(int(t*10)) + '.htk'
+    tag = taglb.get(ACTIVE)
+    RecordingPID = asr.StartRecordingUtt(tag, utt)
+    uttlb.insert(END, utt)
+
+def addUttEnd():
+    global RecordingPID
+    asr.EndRecordingUtt(RecordingPID)
+
+def playUtt(taglb, uttlb):
+    ti = taglb.get(ACTIVE)
+    ui = uttlb.get(ACTIVE)
+    #print(ti, ui)
+    asr.PlayUtt(ti, ui)
+
+def addUtt(taglb, uttlb):
+    global RecordingPID
+    tag = taglb.get(ACTIVE)
+    asr.StartRecordingForTag(tag)
+
+def delUtt(taglb, uttlb):
+    ti = taglb.get(ACTIVE)
+    ui = uttlb.get(ACTIVE)
+    asr.RemoveUtt(ti, ui)
+    uttlb.delete(ACTIVE)
+
+def saveScript(taglb, text):
+    op = text.get('1.0', END)
+    tag = taglb.get(ACTIVE)
+    asr.WriteOperation(tag, op)
+
+def trainUpdate():
+    asr.TrainAll()
+    asr.UpdateASR()
+
+#def MouseR_Press(event):
+#    global curtag, RecordingPID
+#    curtag = 'T' + str(int(time.time()))
+#    create(curtag)
+#    utt = os.path.join(ASR_ROOT, 'train', curtag, 'utt', 'raw', curtag+'.htk')
+#    cmd = [
+#        REC,
+#        '-r' , SampleRate,
+#        '-c',  NumChannels,
+#        '--buffer', BufferSize,
+#        utt
+#        ]
+#    p = subprocess.Popen(cmd)
+#    RecordingPID = p.pid
+#
+#def MouseR_Release(event):
+#    global curtag, RecordingPID
+#    os.kill(RecordingPID, signal.SIGINT)
+#    time.sleep(KILL_WAIT)
+#    #os.system('kill -s 2 ' + str(RecordingPID))
+#    train(curtag)
+#    updateASR()
 
 root = Tk()
 
@@ -349,7 +149,7 @@ frame = Frame(root, width=100, height=100)
 frame.pack()
 frame.bind("<Button-1>", MouseL_Press)
 frame.bind("<ButtonRelease-1>", MouseL_Release)
-frame.bind("<Button-3>", MouseR_Press)
-frame.bind("<ButtonRelease-3>", MouseR_Release)
+frame.bind("<Button-3>", MouseR_Click)
+#frame.bind("<ButtonRelease-3>", MouseR_Release)
 
 root.mainloop()
