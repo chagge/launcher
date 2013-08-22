@@ -8,16 +8,6 @@ import asr
 # global variable
 RecordingPID = 0
 
-# ------------------  -----------------------------
-def MouseL_Press(event):
-    global RecordingPID
-    RecordingPID = asr.StartRecordingForRecognition()
-def MouseL_Release(event):
-    global RecordingPID
-    asr.EndRecordingForRecognition(RecordingPID)
-    tag = asr.Recognize()
-    asr.Run(tag)
-
 # ------------------ tag manager window -----------------------
 def MouseR_Click(event):
     managerWindow = Toplevel(root)
@@ -92,6 +82,16 @@ def MouseR_Click(event):
 
 
 #----------------- GUI event handlers ----------------------------
+
+def MouseL_Press(event):
+    global RecordingPID
+    RecordingPID = asr.StartRecordingForRecognition()
+def MouseL_Release(event):
+    global RecordingPID
+    asr.EndRecordingForRecognition(RecordingPID)
+    tag = asr.Recognize()
+    asr.Run(tag)
+
 def addTag(lb):
     t = time.time()
     tag = 'T' + str(int(t * 10))
@@ -154,6 +154,7 @@ def update():
     asr.TrainAll()
     asr.UpdateASR()
 
+#-------- dophist launcher ---------------
 root = Tk()
 
 frame = Frame(root, width=100, height=100)
@@ -161,6 +162,5 @@ frame.pack()
 frame.bind("<Button-1>", MouseL_Press)
 frame.bind("<ButtonRelease-1>", MouseL_Release)
 frame.bind("<Button-3>", MouseR_Click)
-#frame.bind("<ButtonRelease-3>", MouseR_Release)
 
 root.mainloop()
