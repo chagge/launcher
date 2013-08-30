@@ -1,6 +1,6 @@
 Dophist Voice-Tag
 ===
-A thought on GUI
+GUI operation tree
 ---
 Graphical-User-Interface(GUI) has been proven to be an effective and intuitive mechanism to organize and exhibit system/software operations, both on PC and smart-phone.
 
