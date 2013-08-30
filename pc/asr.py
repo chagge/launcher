@@ -30,7 +30,7 @@ elif ARC.startswith('Mac'):
 HVITE       = os.path.join(BIN, 'HVite')
 
 # training configuration
-HCOPY_CFG = os.path.join(BIN, 'hcopy.cfg')
+HCOPY_CFG = os.path.join(ROOT, 'config', 'hcopy.cfg')
 TRACE_LEVEL = '1'
 NumEMIter = 3
 NDIM = 12
