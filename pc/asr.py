@@ -4,9 +4,11 @@ import signal
 import time
 import struct
 
-ASR_ROOT = '/home/jiayu/dophist/launcher/pc/ASR_ROOT'
-ROOT = '/home/jiayu/dophist/launcher/pc/'
-ARC = 'Linux32'
+ROOT     = '/home/jiayu/dophist/launcher/pc/'
+ARC      = 'Linux32'  # 'Mac64'
+ASR_ROOT = os.path.join(ROOT, 'ASR_ROOT')
+BIN         = os.path.join(ROOT, 'bin', ARC)
+
 # sox configuration
 SampleRate = '8000'
 NumChannels = '1'
@@ -15,14 +17,16 @@ BufferSize = '100'   # buffer size(in samples)
 KILL_WAIT = 0.5
 
 # bin setup
-BIN         = os.path.join(ROOT, 'bin', ARC)
 REC         = os.path.join(BIN, 'rec')
 PLAY        = os.path.join(BIN, 'play')
 VAD         = os.path.join(BIN, 'vad')
 HCOMPV      = os.path.join(BIN, 'HCompV')
 HCOPY       = os.path.join(BIN, 'HCopy')
 HEREST      = os.path.join(BIN, 'HERest')
-HPARSE      = os.path.join(BIN, 'HParse')
+if ARC.startswith('Linux'):
+    HPARSE  = os.path.join(BIN, 'HParse')
+elif ARC.startswith('Mac'):
+    HPARSE  = os.path.join(BIN, 'HParse.py')
 HVITE       = os.path.join(BIN, 'HVite')
 
 # training configuration

@@ -161,6 +161,9 @@ frame = Frame(root, width=100, height=100)
 frame.pack()
 frame.bind("<Button-1>", MouseL_Press)
 frame.bind("<ButtonRelease-1>", MouseL_Release)
-frame.bind("<Button-3>", MouseR_Click)
+if asr.ARC.startswith('Linux'):
+    frame.bind("<Button-3>", MouseR_Click)
+elif asr.ARC.startswith('Mac'):
+    frame.bind("<Button-2>", MouseR_Click)
 
 root.mainloop()
