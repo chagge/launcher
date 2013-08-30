@@ -4,15 +4,21 @@ import signal
 import time
 import struct
 
-ROOT     = '/home/jiayu/dophist/launcher/pc/'
-ARC      = 'Linux32'  # 'Mac64'
+ROOT     = '/Users/jerry-djy/dophist/launcher/pc/'
+ARC      = 'Mac64'  # 'Mac64'
 ASR_ROOT = os.path.join(ROOT, 'ASR_ROOT')
 BIN         = os.path.join(ROOT, 'bin', ARC)
 
 # sox configuration
 SampleRate = '8000'
 NumChannels = '1'
-BufferSize = '100'   # buffer size(in samples)
+if ARC.startswith('Linux'):
+    BufferSize = '100'   # buffer size(in samples)
+elif ARC.startswith('Mac'):
+    BufferSize = '1000'   
+else:
+    BufferSize = '100'
+    print('Warning: Unknown architecture\n')
 
 KILL_WAIT = 0.5
 
