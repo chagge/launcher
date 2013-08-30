@@ -6,6 +6,7 @@ import struct
 
 ASR_ROOT = '/home/jiayu/dophist/launcher/pc/ASR_ROOT'
 ROOT = '/home/jiayu/dophist/launcher/pc/'
+ARC = 'Linux32'
 # sox configuration
 SampleRate = '8000'
 NumChannels = '1'
@@ -14,7 +15,7 @@ BufferSize = '100'   # buffer size(in samples)
 KILL_WAIT = 0.5
 
 # bin setup
-BIN         = os.path.join(ROOT, 'bin', 'Linux32')
+BIN         = os.path.join(ROOT, 'bin', ARC)
 REC         = os.path.join(BIN, 'rec')
 PLAY        = os.path.join(BIN, 'play')
 VAD         = os.path.join(BIN, 'vad')
