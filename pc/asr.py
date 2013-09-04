@@ -4,7 +4,7 @@ import signal
 import time
 import struct
 
-ROOT     = '/Users/jerry-djy/dophist/launcher/pc/'
+ROOT     = os.getcwd()
 ARC      = 'Mac64'  # 'Mac64'
 ASR_ROOT = os.path.join(ROOT, 'ASR_ROOT')
 BIN         = os.path.join(ROOT, 'bin', ARC)
@@ -115,7 +115,7 @@ def StartRecordingForRecognition():
         REC,
         '-r' , SampleRate,
         '-c',  NumChannels,
-        '--buffer', BufferSize,
+        # '--buffer', BufferSize,
         decRaw
         ]
     p = subprocess.Popen(cmd)
@@ -130,7 +130,7 @@ def StartRecordingUtt(tag, utt):
        REC,
         '-r' , SampleRate,
         '-c',  NumChannels,
-        '--buffer', BufferSize,
+        # '--buffer', BufferSize,
         os.path.join(ASR_ROOT, 'train', tag, 'utt', 'raw', utt)
         ]
     p = subprocess.Popen(cmd)
