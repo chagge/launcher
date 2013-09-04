@@ -202,6 +202,7 @@ def UpdateASR():
 
 def Recognize():
     decoderRoot = os.path.join(ASR_ROOT, 'decode')
+    os.system('rm ' + REC_MLF)
     subprocess.call([
         VAD,
         os.path.join(decoderRoot, decRaw),
